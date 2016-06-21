@@ -15,15 +15,17 @@ def input_students
 # return the array of students
 students
 end
-
+    
 def print_header
   puts "The students of Villians Academy"
   puts "-------------"
 end
 
-def print(students)
+def print(students, letter)
     students.each_with_index do |student, i|
-    puts "#{i+1}. #{student [:name]} (#{student[:cohort]} cohort)"
+    if student [:name][0].downcase == letter
+      puts "#{i+1}. #{student [:name]} (#{student[:cohort]} cohort)"
+  end
   end
 end
 
@@ -32,7 +34,8 @@ def print_footer(names)
 end
 
 students = input_students
+
 #nothing happens until we call the methods
 print_header
-print(students)
+print(students, "h")
 print_footer(students)
