@@ -1,3 +1,32 @@
+def interactive_menu
+   students = []
+   loop do
+      #1. Present the options
+      puts "1. Input the students"
+      puts "2. Show the students"
+      puts "9. Exit"
+      #2. Store result as a variable
+      selection = gets.chomp
+      #3. Do what the user has asked
+      case selection
+      when "1"
+         students = input_students
+      when "2"
+         # Show the students
+         print_header
+         cohort_months = cohorts(students)
+         print(students, cohort_months)
+         print_footer(students)
+      when "9"
+         # exit
+         exit
+      else
+         "I didn't catch that. Could you try again please"
+      end
+   end
+
+end
+
 def input_students
    puts "Please enter the names and cohorts of the students"
    puts "Please enter in the format: name, cohort"
