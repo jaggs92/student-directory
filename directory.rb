@@ -11,6 +11,7 @@ def print_menu
    puts "1. Input the students"
    puts "2. Show the students"
    puts "3. Save the list to students.csv"
+   puts "4. Load the list from students.csv"
    puts "9. Exit"
 end
 
@@ -22,6 +23,8 @@ def process(selection)
       show_students
    when "3"
       save_students
+   when "4"
+      load_students
    when "9"
       exit
    else
@@ -114,5 +117,14 @@ def save_students
    file.close
 end
 
+def load_students(filename = "students.csv")
+   file = File.open(filename, "r")
+   @students = []
+   file.readlines.each do |line|
+      name, cohort, hobby = line.chomp.split(",")
+      @students << {name: name, cohort: cohort, hobby: hobby}
+   end
+   file.close
+end
 
 interactive_menu
