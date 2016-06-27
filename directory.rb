@@ -10,6 +10,7 @@ end
 def print_menu
    puts "1. Input the students"
    puts "2. Show the students"
+   puts "3. Save the list to students.csv"
    puts "9. Exit"
 end
 
@@ -19,10 +20,12 @@ def process(selection)
       input_students
    when "2"
       show_students
+   when "3"
+      save_students
    when "9"
       exit
    else
-      puts "I don't know what you meant, try again"
+      puts "I didn't catch that. Can you try again please?"
    end
 end
 
@@ -32,7 +35,6 @@ def show_students
    print_students_list(cohort_months)
    print_footer
 end
-
 
 
 def input_students
@@ -77,7 +79,7 @@ end
 
 def print_students_list(cohort_months)
    linewidth = 100
-   puts "Nothing to print yo!" if @students.empty?  
+   puts "Nothing to print yo!" if @students.empty?
    cohort_months.each do |month|
       @students.each_with_index do |student, index|
          # Or you can use student["name"] if your hash was set up like so:
@@ -99,5 +101,18 @@ def print_footer
       puts "Overall, we have #{@students.count} villainous students.".center(50)
    end
 end
+
+def save_students
+   # Open the file for writing
+   file = File.open("students.csv", "w")
+   # Iterate over the array of students
+   @students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:hobby]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+   end
+   file.close
+end
+
 
 interactive_menu
