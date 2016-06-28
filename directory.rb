@@ -41,29 +41,26 @@ end
 
 
 def input_students
-   puts "Please enter the names, cohorts and favourite hobbies of the students"
-   puts "Please enter in the format: name, cohort, favourite hobby"
-   puts "Leave the cohort or hobby field blank if you wish"
+   puts "Please enter the names and cohorts of the students"
+   puts "Please enter in the format: name, cohort"
    puts "To finish, just hit return twice"
    @students = []
-   name_cohort_hobby = STDIN.gets.chomp
-   while !name_cohort_hobby.empty? do
-      while name_cohort_hobby.count(",") != 2
-         puts "Please use the format: name,cohort,hobby (with two \",\"s)"
-         name_cohort_hobby = STDIN.gets.chomp
+   name_cohort = STDIN.gets.chomp
+   while !name_cohort.empty? do
+      while name_cohort.count(",") != 1
+         puts "Please use the format: name,cohort (with two \",\"s)"
+         name_cohort = STDIN.gets.chomp
       end
-      name = name_cohort_hobby.split(",")[0]
-      cohort = name_cohort_hobby.split(",")[1].capitalize || "Unspecified"
+      name = name_cohort.split(",")[0]
+      cohort = name_cohort.split(",")[1].capitalize || "Unspecified"
       cohort = cohort[1..-1].capitalize if cohort[0] == " "
-      hobby = name_cohort_hobby.split(",")[2].capitalize || "Unspecified"
-      hobby = hobby[1..-1].capitalize if hobby[0] == " "
-      @students << {name: name, cohort: cohort, hobby: hobby}
+      @students << {name: name, cohort: cohort}
       if @students.count == 1
          puts "We now have 1 student"
       else
          puts "We now have #{@students.count} students"
       end
-      name_cohort_hobby = STDIN.gets.chomp
+      name_cohort = STDIN.gets.chomp
    end
 end
 
@@ -85,7 +82,6 @@ def print_students_list(cohort_months)
       @students.each_with_index do |student, index|
          if student[:cohort] == month
             puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(50)
-            puts "Hobby: #{student[:hobby]}".center(50)
          end
       end
    end
@@ -104,7 +100,7 @@ end
 def save_students
    file = File.open("students.csv", "w")
    @students.each do |student|
-      student_data = [student[:name], student[:cohort], student[:hobby]]
+      student_data = [student[:name], student[:cohort]]
       csv_line = student_data.join(",")
       file.puts csv_line
    end
@@ -115,8 +111,8 @@ def load_students(filename = "students.csv")
    file = File.open(filename, "r")
    @students = []
    file.readlines.each do |line|
-      name, cohort, hobby = line.chomp.split(",")
-      @students << {name: name, cohort: cohort, hobby: hobby}
+      name, cohort = line.chomp.split(",")
+      @students << {name: name, cohort: cohort}
    end
    file.close
 end
