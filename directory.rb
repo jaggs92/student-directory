@@ -3,7 +3,7 @@
 def interactive_menu
    loop do
       print_menu
-      process(gets.chomp)
+      process(STDIN.gets.chomp)
    end
 end
 
@@ -46,18 +46,16 @@ def input_students
    puts "Leave the cohort or hobby field blank if you wish"
    puts "To finish, just hit return twice"
    @students = []
-   name_cohort_hobby = gets.chomp
+   name_cohort_hobby = STDIN.gets.chomp
    while !name_cohort_hobby.empty? do
       while name_cohort_hobby.count(",") != 2
          puts "Please use the format: name,cohort,hobby (with two \",\"s)"
-         name_cohort_hobby = gets.chomp
+         name_cohort_hobby = STDIN.gets.chomp
       end
       name = name_cohort_hobby.split(",")[0]
       cohort = name_cohort_hobby.split(",")[1].capitalize || "Unspecified"
-      # Get rid of the potential " " after diving commas
       cohort = cohort[1..-1].capitalize if cohort[0] == " "
       hobby = name_cohort_hobby.split(",")[2].capitalize || "Unspecified"
-      # Get rid of the potential " " after diving commas
       hobby = hobby[1..-1].capitalize if hobby[0] == " "
       @students << {name: name, cohort: cohort, hobby: hobby}
       if @students.count == 1
@@ -65,7 +63,7 @@ def input_students
       else
          puts "We now have #{@students.count} students"
       end
-      name_cohort_hobby = gets.chomp
+      name_cohort_hobby = STDIN.gets.chomp
    end
 end
 
@@ -85,8 +83,6 @@ def print_students_list(cohort_months)
    puts "Nothing to print yo!" if @students.empty?
    cohort_months.each do |month|
       @students.each_with_index do |student, index|
-         # Or you can use student["name"] if your hash was set up like so:
-         # "name" => "Darth Vader", etc. (Two ways of doing it)
          if student[:cohort] == month
             puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(50)
             puts "Hobby: #{student[:hobby]}".center(50)
@@ -106,9 +102,7 @@ def print_footer
 end
 
 def save_students
-   # Open the file for writing
    file = File.open("students.csv", "w")
-   # Iterate over the array of students
    @students.each do |student|
       student_data = [student[:name], student[:cohort], student[:hobby]]
       csv_line = student_data.join(",")
@@ -127,4 +121,17 @@ def load_students(filename = "students.csv")
    file.close
 end
 
+def try_load_students
+   filename = ARGV.first
+   return if filename.nil?
+   if File.exists?(filename)
+      load_students(filename)
+      puts "Loaded #{@students.count} from #{filename}"
+   else
+      puts "Sorry #{filename} does not exist."
+      exit
+   end
+end
+
+try_load_students
 interactive_menu
