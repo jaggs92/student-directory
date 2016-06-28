@@ -77,7 +77,7 @@ end
 
 def print_students_list(cohort_months)
    linewidth = 100
-   puts "Nothing to print yo!" if @students.empty?
+   puts "No students here..." if @students.empty?
    cohort_months.each do |month|
       @students.each_with_index do |student, index|
          if student[:cohort] == month
